@@ -1,9 +1,9 @@
 from sly import Lexer
-
 class MyLexer(Lexer):
     def __init__(self):
         self.nesting_level = 0
 
+    # List of valid tokens
     tokens = {
         INTEGER, FLOAT, STRING, BOOLEAN,
         IF, ELSE, FOR, WHILE, SWITCH, CASE,
@@ -12,19 +12,22 @@ class MyLexer(Lexer):
         PLUS, MINUS, DIVIDE, TIMES,  
     }
 
+    # literal characters
     literals = {
         '(', ')', '{', '}', ';'
     }
 
+    # Ignore whitespaces, tabs and single line comments
     ignore = '[ \t]'
     ignore_comments = r'\/\/.*'
     
-
+    # Basic operations
     PLUS = r'\+'
     MINUS = r'\-'
     DIVIDE = r'\/'
     TIMES = r'\*'
 
+    # Relation operations
     EQUAL =  r'\=\='
     NEQUAL = r'\!\='
     GEQUAL = r'>='
@@ -33,22 +36,28 @@ class MyLexer(Lexer):
     LESST =  r'<'
     ASSIGN =  r'\='
 
+    # Logical operators
     AND = r'\&\&'
     OR = r'\|\|'
     NOT = r'\!(?!\W)'
 
+    # String literals
     STRING = r'(\".*\")|(\'.*\')'
 
+    # Floating point numbers
     @_(r'-?\d+\.\d+')
     def FLOAT(self, t):
         t.value = float(t.value)
         return t
 
+    # Integer numbers
     @_(r'-?\d+')
     def INTEGER(self, t):
         t.value = int(t.value)
         return t
 
+    # left and right braces
+    # nesting level => level of nested scope created by braces
     @_(r'\{')
     def lbrace(self, t):
         t.value = '{'
@@ -61,6 +70,7 @@ class MyLexer(Lexer):
         self.nesting_level -= 1
         return t
 
+    # Identifiers and keywords
     IDENTIFIER = r'[a-zA-Z_]+[a-zA-Z0-9_]*'
     IDENTIFIER['if'] = IF
     IDENTIFIER['else'] = ELSE
@@ -75,10 +85,12 @@ class MyLexer(Lexer):
     IDENTIFIER['true'] = BOOLEAN
     IDENTIFIER['false'] = BOOLEAN
 
+    # Ignore new lines and count line numbers
     @_(r'\n+')
     def ignore_newline(self, t):
         self.lineno += t.value.count('\n')
 
+    # specify number of column for characters
     def find_column(text, token):
         last_cr = text.rfind('\n', 0, token.index)
         if last_cr < 0:
@@ -86,6 +98,7 @@ class MyLexer(Lexer):
         column = (token.index - last_cr) + 1
         return column
 
+    # Simple error handling
     def error(self, t):
         print(f'ERROR! Line {self.lineno}: Bad Character {t.value[0]}')
         self.index += 1
