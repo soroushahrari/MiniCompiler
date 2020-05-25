@@ -1,14 +1,20 @@
 from lexer import MyLexer
+from symbolTable import SymTable
+
+
+# Read source code from file
+def filereader(filename):
+    with open (filename) as f:
+        data = f.read()
+    return data
 
 if __name__ == "__main__":
-    data = '''
-        int x = 0;
-        while (x < 10) {
-            x = x + 2
-        }
-    ''' 
+    data = filereader('test/test.txt')
     lexer = MyLexer()
+    mySymboleTable = SymTable()
+    tokens = lexer.tokenize(data)
 
-    for token in lexer.tokenize(data):
-        print(MyLexer.find_column(data, token), token.type, token.value, f'nesting level: {lexer.nesting_level}')
-        # print(token)
+    # Insert identifiers into symbol table
+    for token in tokens:
+        if token.type == 'IDENTIFIER':    
+            mySymboleTable.insert(token)
