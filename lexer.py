@@ -91,7 +91,7 @@ class MyLexer(Lexer):
         self.lineno += t.value.count('\n')
 
     # specify number of column for characters
-    def find_column(text, token):
+    def find_column(self, text, token):
         last_cr = text.rfind('\n', 0, token.index)
         if last_cr < 0:
             last_cr = 0
@@ -101,5 +101,6 @@ class MyLexer(Lexer):
     # Simple error handling
     def error(self, t):
         print(f'ERROR! Line {self.lineno}: Bad Character {t.value[0]}')
+        # Move on to next characters
         self.index += 1
     
