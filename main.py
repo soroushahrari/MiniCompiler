@@ -9,12 +9,21 @@ def filereader(filename):
     return data
 
 if __name__ == "__main__":
-    data = filereader('test/test.txt')
+    fileName = input('Enter your file Address: ex: test/test.txt\n')
+    data = filereader(fileName)
     lexer = MyLexer()
-    mySymboleTable = SymTable()
+    mySymbolTable = SymTable()
     tokens = lexer.tokenize(data)
+    list_of_tokens = []
 
     # Insert identifiers into symbol table
     for token in tokens:
+        list_of_tokens.append(token)
         if token.type == 'IDENTIFIER':    
-            mySymboleTable.insert(token)
+            mySymbolTable.insert(token)
+
+    print('Symbol Table =>', mySymbolTable.symbols)
+    print('-----------------------------')
+    print('List of All tokens\n')
+    for token in list_of_tokens:
+        print(token)
