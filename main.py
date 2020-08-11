@@ -12,7 +12,7 @@ def filereader(filename):
 if __name__ == "__main__":
     mySymbolTable = SymTable()
     lexer = MyLexer()
-    parser = MyParser()
+    parser = MyParser(mySymbolTable)
     list_of_tokens = []
 
     if len(sys.argv) != 2:
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #     if token.type == 'IDENTIFIER':    
     #         mySymbolTable.insert(token)
 
-    # print('Symbol Table =>', mySymbolTable.symbols)
+    print('Symbol Table =>', mySymbolTable.symbols)
     # print('-----------------------------')
     # print('List of All tokens\n')
     # for token in list_of_tokens:
