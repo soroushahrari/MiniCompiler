@@ -4,6 +4,6 @@ if ( a ) {
 }
 
 while ( a > 10 ) {
-     str a = "hello"
+     str a = "hello";
      b = 10;
 }
