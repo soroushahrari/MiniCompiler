@@ -73,6 +73,8 @@ class MyParser(Parser):
     @_('TYPE IDENTIFIER ASSIGN expr ";"')
     def var_declaration(self, p):
         print('#12#', self.symstack, '\n')
+        if (p.TYPE != p.expr[0]):
+            return f'ERROR: Value does not match the type at line {p.lineno}'
         # print(self.symstack, '\n')
         # print(self.statestack)
         return ('var_declaration', p.IDENTIFIER, p.expr)
