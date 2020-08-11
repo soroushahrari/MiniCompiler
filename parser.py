@@ -3,6 +3,10 @@ from lexer import MyLexer
 
 class MyParser(Parser):
 
+    def __init__(self, symbolTable):
+        super().__init__()
+        self.symbolTable = symbolTable
+
     # Get token list form Lexer
     tokens = MyLexer.tokens
     
@@ -75,16 +79,32 @@ class MyParser(Parser):
         print('#12#', self.symstack, '\n')
         if (p.TYPE != p.expr[0]):
             return f'ERROR: Value does not match the type at line {p.lineno}'
+        for token in self.symstack:
+            if token.type == "IDENTIFIER":
+                if self.symbolTable.search(token) == False:
+                    self.symbolTable.insert(token)
+                else:
+                    return f'ERROR: Variable already defined at line {p.lineno}'
         return ('var_declaration', p.IDENTIFIER, p.expr)
     
     @_('TYPE IDENTIFIER ";"')
     def var_declaration(self, p):
         print('#13#', self.symstack, '\n')
+        for token in self.symstack:
+            if token.type == "IDENTIFIER":
+                if self.symbolTable.search(token) == False:
+                    self.symbolTable.insert(token)
+                else:
+                    return f'ERROR: Variable already defined at line{p.lineno}'
         return ('var_declaration', p.IDENTIFIER)
 
     @_('IDENTIFIER ASSIGN expr ";"')
     def assign_statement(self, p):
         print('#14#', self.symstack, '\n')
+        for token in self.symstack:
+            if token.type == "IDENTIFIER":
+                if self.symbolTable.search(token) == False:
+                    return f'ERROR: Variable is not defined at line {p.lineno}'
         return ('var_assignment', p.IDENTIFIER, p.expr)
 
     @_('expr PLUS expr',
