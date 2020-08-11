@@ -37,10 +37,10 @@ Rule 33    literal -> INTEGER
 
 Unused terminals:
 
+    FOR
+    NOT
     SWITCH
     CASE
-    NOT
-    FOR
 
 Terminals, with rules where they appear:
 
