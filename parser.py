@@ -75,8 +75,6 @@ class MyParser(Parser):
         print('#12#', self.symstack, '\n')
         if (p.TYPE != p.expr[0]):
             return f'ERROR: Value does not match the type at line {p.lineno}'
-        # print(self.symstack, '\n')
-        # print(self.statestack)
         return ('var_declaration', p.IDENTIFIER, p.expr)
     
     @_('TYPE IDENTIFIER ";"')
@@ -87,7 +85,6 @@ class MyParser(Parser):
     @_('IDENTIFIER ASSIGN expr ";"')
     def assign_statement(self, p):
         print('#14#', self.symstack, '\n')
-        # print('this is =>>>>>>>>>>>', self.symstack)
         return ('var_assignment', p.IDENTIFIER, p.expr)
 
     @_('expr PLUS expr',
@@ -143,6 +140,3 @@ class MyParser(Parser):
     
     def error(self, token):
         print(f'SYNTAX ERROR near character "{token.value}" at line {token.lineno}')
-
-    # def sym(self, token):
-    #     print(token)
