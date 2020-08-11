@@ -58,17 +58,17 @@ class MyLexer(Lexer):
 
     # left and right braces
     # nesting level => level of nested scope created by braces
-    @_(r'\{')
-    def lbrace(self, t):
-        t.value = '{'
-        self.nesting_level +=1
-        return t
+    # @_(r'\{')
+    # def lbrace(self, t):
+    #     t.value = '{'
+    #     self.nesting_level +=1
+    #     return t
     
-    @_(r'\}')
-    def rbrace(self, t):
-        t.value = '}'
-        self.nesting_level -= 1
-        return t
+    # @_(r'\}')
+    # def rbrace(self, t):
+    #     t.value = '}'
+    #     self.nesting_level -= 1
+    #     return t
 
     # Identifiers and keywords
     IDENTIFIER = r'[a-zA-Z_]+[a-zA-Z0-9_]*'
