@@ -11,7 +11,7 @@ Rule 7     statement -> assign_statement
 Rule 8     statement -> var_declaration
 Rule 9     if_statement -> IF ( expr ) { block }
 Rule 10    if_statement -> IF ( expr ) { block } ELSE { block }
-Rule 11    while_statement -> WHILE expr { block }
+Rule 11    while_statement -> WHILE ( expr ) { block }
 Rule 12    var_declaration -> TYPE IDENTIFIER ;
 Rule 13    var_declaration -> TYPE IDENTIFIER ASSIGN expr ;
 Rule 14    assign_statement -> IDENTIFIER ASSIGN expr ;
@@ -37,15 +37,15 @@ Rule 33    literal -> INTEGER
 
 Unused terminals:
 
-    CASE
-    NOT
     FOR
+    NOT
     SWITCH
+    CASE
 
 Terminals, with rules where they appear:
 
-(                    : 9 10 17
-)                    : 9 10 17
+(                    : 9 10 11 17
+)                    : 9 10 11 17
 ;                    : 12 13 14
 AND                  : 19
 ASSIGN               : 13 14
@@ -101,7 +101,7 @@ state 0
     (6) statement -> . if_statement
     (7) statement -> . assign_statement
     (8) statement -> . var_declaration
-    (11) while_statement -> . WHILE expr { block }
+    (11) while_statement -> . WHILE ( expr ) { block }
     (9) if_statement -> . IF ( expr ) { block }
     (10) if_statement -> . IF ( expr ) { block } ELSE { block }
     (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
@@ -134,7 +134,7 @@ state 2
     (6) statement -> . if_statement
     (7) statement -> . assign_statement
     (8) statement -> . var_declaration
-    (11) while_statement -> . WHILE expr { block }
+    (11) while_statement -> . WHILE ( expr ) { block }
     (9) if_statement -> . IF ( expr ) { block }
     (10) if_statement -> . IF ( expr ) { block } ELSE { block }
     (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
@@ -210,54 +210,28 @@ state 7
 
 state 8
 
-    (11) while_statement -> WHILE . expr { block }
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    (11) while_statement -> WHILE . ( expr ) { block }
+    (               shift and go to state 13
 
-    expr                           shift and go to state 13
-    literal                        shift and go to state 14
 
 state 9
 
     (9) if_statement -> IF . ( expr ) { block }
     (10) if_statement -> IF . ( expr ) { block } ELSE { block }
-    (               shift and go to state 21
+    (               shift and go to state 14
 
 
 state 10
 
     (14) assign_statement -> IDENTIFIER . ASSIGN expr ;
-    ASSIGN          shift and go to state 22
+    ASSIGN          shift and go to state 15
 
 
 state 11
 
     (12) var_declaration -> TYPE . IDENTIFIER ;
     (13) var_declaration -> TYPE . IDENTIFIER ASSIGN expr ;
-    IDENTIFIER      shift and go to state 23
+    IDENTIFIER      shift and go to state 16
 
 
 state 12
@@ -273,77 +247,7 @@ state 12
 
 state 13
 
-    (11) while_statement -> WHILE expr . { block }
-    (18) expr -> expr . OR expr
-    (19) expr -> expr . AND expr
-    (20) expr -> expr . NEQUAL expr
-    (21) expr -> expr . EQUAL expr
-    (22) expr -> expr . GEQUAL expr
-    (23) expr -> expr . GREATERT expr
-    (24) expr -> expr . LEQUAL expr
-    (25) expr -> expr . LESST expr
-    (26) expr -> expr . DIVIDE expr
-    (27) expr -> expr . TIMES expr
-    (28) expr -> expr . MINUS expr
-    (29) expr -> expr . PLUS expr
-    {               shift and go to state 24
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
-
-
-state 14
-
-    (15) expr -> literal .
-    {               reduce using rule 15 (expr -> literal .)
-    OR              reduce using rule 15 (expr -> literal .)
-    AND             reduce using rule 15 (expr -> literal .)
-    NEQUAL          reduce using rule 15 (expr -> literal .)
-    EQUAL           reduce using rule 15 (expr -> literal .)
-    GEQUAL          reduce using rule 15 (expr -> literal .)
-    GREATERT        reduce using rule 15 (expr -> literal .)
-    LEQUAL          reduce using rule 15 (expr -> literal .)
-    LESST           reduce using rule 15 (expr -> literal .)
-    DIVIDE          reduce using rule 15 (expr -> literal .)
-    TIMES           reduce using rule 15 (expr -> literal .)
-    MINUS           reduce using rule 15 (expr -> literal .)
-    PLUS            reduce using rule 15 (expr -> literal .)
-    )               reduce using rule 15 (expr -> literal .)
-    ;               reduce using rule 15 (expr -> literal .)
-
-
-state 15
-
-    (16) expr -> IDENTIFIER .
-    {               reduce using rule 16 (expr -> IDENTIFIER .)
-    OR              reduce using rule 16 (expr -> IDENTIFIER .)
-    AND             reduce using rule 16 (expr -> IDENTIFIER .)
-    NEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
-    EQUAL           reduce using rule 16 (expr -> IDENTIFIER .)
-    GEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
-    GREATERT        reduce using rule 16 (expr -> IDENTIFIER .)
-    LEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
-    LESST           reduce using rule 16 (expr -> IDENTIFIER .)
-    DIVIDE          reduce using rule 16 (expr -> IDENTIFIER .)
-    TIMES           reduce using rule 16 (expr -> IDENTIFIER .)
-    MINUS           reduce using rule 16 (expr -> IDENTIFIER .)
-    PLUS            reduce using rule 16 (expr -> IDENTIFIER .)
-    )               reduce using rule 16 (expr -> IDENTIFIER .)
-    ;               reduce using rule 16 (expr -> IDENTIFIER .)
-
-
-state 16
-
-    (17) expr -> ( . expr )
+    (11) while_statement -> WHILE ( . expr ) { block }
     (15) expr -> . literal
     (16) expr -> . IDENTIFIER
     (17) expr -> . ( expr )
@@ -363,97 +267,17 @@ state 16
     (31) literal -> . STRING
     (32) literal -> . FLOAT
     (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
-    expr                           shift and go to state 37
-    literal                        shift and go to state 14
+    expr                           shift and go to state 18
+    literal                        shift and go to state 19
 
-state 17
-
-    (30) literal -> BOOLEAN .
-    {               reduce using rule 30 (literal -> BOOLEAN .)
-    OR              reduce using rule 30 (literal -> BOOLEAN .)
-    AND             reduce using rule 30 (literal -> BOOLEAN .)
-    NEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
-    EQUAL           reduce using rule 30 (literal -> BOOLEAN .)
-    GEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
-    GREATERT        reduce using rule 30 (literal -> BOOLEAN .)
-    LEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
-    LESST           reduce using rule 30 (literal -> BOOLEAN .)
-    DIVIDE          reduce using rule 30 (literal -> BOOLEAN .)
-    TIMES           reduce using rule 30 (literal -> BOOLEAN .)
-    MINUS           reduce using rule 30 (literal -> BOOLEAN .)
-    PLUS            reduce using rule 30 (literal -> BOOLEAN .)
-    )               reduce using rule 30 (literal -> BOOLEAN .)
-    ;               reduce using rule 30 (literal -> BOOLEAN .)
-
-
-state 18
-
-    (31) literal -> STRING .
-    {               reduce using rule 31 (literal -> STRING .)
-    OR              reduce using rule 31 (literal -> STRING .)
-    AND             reduce using rule 31 (literal -> STRING .)
-    NEQUAL          reduce using rule 31 (literal -> STRING .)
-    EQUAL           reduce using rule 31 (literal -> STRING .)
-    GEQUAL          reduce using rule 31 (literal -> STRING .)
-    GREATERT        reduce using rule 31 (literal -> STRING .)
-    LEQUAL          reduce using rule 31 (literal -> STRING .)
-    LESST           reduce using rule 31 (literal -> STRING .)
-    DIVIDE          reduce using rule 31 (literal -> STRING .)
-    TIMES           reduce using rule 31 (literal -> STRING .)
-    MINUS           reduce using rule 31 (literal -> STRING .)
-    PLUS            reduce using rule 31 (literal -> STRING .)
-    )               reduce using rule 31 (literal -> STRING .)
-    ;               reduce using rule 31 (literal -> STRING .)
-
-
-state 19
-
-    (32) literal -> FLOAT .
-    {               reduce using rule 32 (literal -> FLOAT .)
-    OR              reduce using rule 32 (literal -> FLOAT .)
-    AND             reduce using rule 32 (literal -> FLOAT .)
-    NEQUAL          reduce using rule 32 (literal -> FLOAT .)
-    EQUAL           reduce using rule 32 (literal -> FLOAT .)
-    GEQUAL          reduce using rule 32 (literal -> FLOAT .)
-    GREATERT        reduce using rule 32 (literal -> FLOAT .)
-    LEQUAL          reduce using rule 32 (literal -> FLOAT .)
-    LESST           reduce using rule 32 (literal -> FLOAT .)
-    DIVIDE          reduce using rule 32 (literal -> FLOAT .)
-    TIMES           reduce using rule 32 (literal -> FLOAT .)
-    MINUS           reduce using rule 32 (literal -> FLOAT .)
-    PLUS            reduce using rule 32 (literal -> FLOAT .)
-    )               reduce using rule 32 (literal -> FLOAT .)
-    ;               reduce using rule 32 (literal -> FLOAT .)
-
-
-state 20
-
-    (33) literal -> INTEGER .
-    {               reduce using rule 33 (literal -> INTEGER .)
-    OR              reduce using rule 33 (literal -> INTEGER .)
-    AND             reduce using rule 33 (literal -> INTEGER .)
-    NEQUAL          reduce using rule 33 (literal -> INTEGER .)
-    EQUAL           reduce using rule 33 (literal -> INTEGER .)
-    GEQUAL          reduce using rule 33 (literal -> INTEGER .)
-    GREATERT        reduce using rule 33 (literal -> INTEGER .)
-    LEQUAL          reduce using rule 33 (literal -> INTEGER .)
-    LESST           reduce using rule 33 (literal -> INTEGER .)
-    DIVIDE          reduce using rule 33 (literal -> INTEGER .)
-    TIMES           reduce using rule 33 (literal -> INTEGER .)
-    MINUS           reduce using rule 33 (literal -> INTEGER .)
-    PLUS            reduce using rule 33 (literal -> INTEGER .)
-    )               reduce using rule 33 (literal -> INTEGER .)
-    ;               reduce using rule 33 (literal -> INTEGER .)
-
-
-state 21
+state 14
 
     (9) if_statement -> IF ( . expr ) { block }
     (10) if_statement -> IF ( . expr ) { block } ELSE { block }
@@ -476,17 +300,17 @@ state 21
     (31) literal -> . STRING
     (32) literal -> . FLOAT
     (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
-    expr                           shift and go to state 38
-    literal                        shift and go to state 14
+    expr                           shift and go to state 25
+    literal                        shift and go to state 19
 
-state 22
+state 15
 
     (14) assign_statement -> IDENTIFIER ASSIGN . expr ;
     (15) expr -> . literal
@@ -508,58 +332,27 @@ state 22
     (31) literal -> . STRING
     (32) literal -> . FLOAT
     (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
-    expr                           shift and go to state 39
-    literal                        shift and go to state 14
+    expr                           shift and go to state 26
+    literal                        shift and go to state 19
 
-state 23
+state 16
 
     (12) var_declaration -> TYPE IDENTIFIER . ;
     (13) var_declaration -> TYPE IDENTIFIER . ASSIGN expr ;
-    ;               shift and go to state 40
-    ASSIGN          shift and go to state 41
+    ;               shift and go to state 27
+    ASSIGN          shift and go to state 28
 
 
-state 24
+state 17
 
-    (11) while_statement -> WHILE expr { . block }
-    (1) block -> .
-    (2) block -> . statements
-    (3) statements -> . statements statement
-    (4) statements -> . statement
-    (5) statement -> . while_statement
-    (6) statement -> . if_statement
-    (7) statement -> . assign_statement
-    (8) statement -> . var_declaration
-    (11) while_statement -> . WHILE expr { block }
-    (9) if_statement -> . IF ( expr ) { block }
-    (10) if_statement -> . IF ( expr ) { block } ELSE { block }
-    (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
-    (12) var_declaration -> . TYPE IDENTIFIER ;
-    (13) var_declaration -> . TYPE IDENTIFIER ASSIGN expr ;
-    }               reduce using rule 1 (block -> .)
-    WHILE           shift and go to state 8
-    IF              shift and go to state 9
-    IDENTIFIER      shift and go to state 10
-    TYPE            shift and go to state 11
-
-    block                          shift and go to state 42
-    statements                     shift and go to state 2
-    statement                      shift and go to state 3
-    while_statement                shift and go to state 4
-    if_statement                   shift and go to state 5
-    assign_statement               shift and go to state 6
-    var_declaration                shift and go to state 7
-
-state 25
-
-    (18) expr -> expr OR . expr
+    (17) expr -> ( . expr )
     (15) expr -> . literal
     (16) expr -> . IDENTIFIER
     (17) expr -> . ( expr )
@@ -579,371 +372,19 @@ state 25
     (31) literal -> . STRING
     (32) literal -> . FLOAT
     (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
-    expr                           shift and go to state 43
-    literal                        shift and go to state 14
+    expr                           shift and go to state 29
+    literal                        shift and go to state 19
 
-state 26
+state 18
 
-    (19) expr -> expr AND . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 44
-    literal                        shift and go to state 14
-
-state 27
-
-    (20) expr -> expr NEQUAL . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 45
-    literal                        shift and go to state 14
-
-state 28
-
-    (21) expr -> expr EQUAL . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 46
-    literal                        shift and go to state 14
-
-state 29
-
-    (22) expr -> expr GEQUAL . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 47
-    literal                        shift and go to state 14
-
-state 30
-
-    (23) expr -> expr GREATERT . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 48
-    literal                        shift and go to state 14
-
-state 31
-
-    (24) expr -> expr LEQUAL . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 49
-    literal                        shift and go to state 14
-
-state 32
-
-    (25) expr -> expr LESST . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 50
-    literal                        shift and go to state 14
-
-state 33
-
-    (26) expr -> expr DIVIDE . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 51
-    literal                        shift and go to state 14
-
-state 34
-
-    (27) expr -> expr TIMES . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 52
-    literal                        shift and go to state 14
-
-state 35
-
-    (28) expr -> expr MINUS . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 53
-    literal                        shift and go to state 14
-
-state 36
-
-    (29) expr -> expr PLUS . expr
-    (15) expr -> . literal
-    (16) expr -> . IDENTIFIER
-    (17) expr -> . ( expr )
-    (18) expr -> . expr OR expr
-    (19) expr -> . expr AND expr
-    (20) expr -> . expr NEQUAL expr
-    (21) expr -> . expr EQUAL expr
-    (22) expr -> . expr GEQUAL expr
-    (23) expr -> . expr GREATERT expr
-    (24) expr -> . expr LEQUAL expr
-    (25) expr -> . expr LESST expr
-    (26) expr -> . expr DIVIDE expr
-    (27) expr -> . expr TIMES expr
-    (28) expr -> . expr MINUS expr
-    (29) expr -> . expr PLUS expr
-    (30) literal -> . BOOLEAN
-    (31) literal -> . STRING
-    (32) literal -> . FLOAT
-    (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    expr                           shift and go to state 54
-    literal                        shift and go to state 14
-
-state 37
-
-    (17) expr -> ( expr . )
+    (11) while_statement -> WHILE ( expr . ) { block }
     (18) expr -> expr . OR expr
     (19) expr -> expr . AND expr
     (20) expr -> expr . NEQUAL expr
@@ -956,22 +397,136 @@ state 37
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    )               shift and go to state 55
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    )               shift and go to state 30
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 38
+state 19
+
+    (15) expr -> literal .
+    )               reduce using rule 15 (expr -> literal .)
+    OR              reduce using rule 15 (expr -> literal .)
+    AND             reduce using rule 15 (expr -> literal .)
+    NEQUAL          reduce using rule 15 (expr -> literal .)
+    EQUAL           reduce using rule 15 (expr -> literal .)
+    GEQUAL          reduce using rule 15 (expr -> literal .)
+    GREATERT        reduce using rule 15 (expr -> literal .)
+    LEQUAL          reduce using rule 15 (expr -> literal .)
+    LESST           reduce using rule 15 (expr -> literal .)
+    DIVIDE          reduce using rule 15 (expr -> literal .)
+    TIMES           reduce using rule 15 (expr -> literal .)
+    MINUS           reduce using rule 15 (expr -> literal .)
+    PLUS            reduce using rule 15 (expr -> literal .)
+    ;               reduce using rule 15 (expr -> literal .)
+
+
+state 20
+
+    (16) expr -> IDENTIFIER .
+    )               reduce using rule 16 (expr -> IDENTIFIER .)
+    OR              reduce using rule 16 (expr -> IDENTIFIER .)
+    AND             reduce using rule 16 (expr -> IDENTIFIER .)
+    NEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
+    EQUAL           reduce using rule 16 (expr -> IDENTIFIER .)
+    GEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
+    GREATERT        reduce using rule 16 (expr -> IDENTIFIER .)
+    LEQUAL          reduce using rule 16 (expr -> IDENTIFIER .)
+    LESST           reduce using rule 16 (expr -> IDENTIFIER .)
+    DIVIDE          reduce using rule 16 (expr -> IDENTIFIER .)
+    TIMES           reduce using rule 16 (expr -> IDENTIFIER .)
+    MINUS           reduce using rule 16 (expr -> IDENTIFIER .)
+    PLUS            reduce using rule 16 (expr -> IDENTIFIER .)
+    ;               reduce using rule 16 (expr -> IDENTIFIER .)
+
+
+state 21
+
+    (30) literal -> BOOLEAN .
+    )               reduce using rule 30 (literal -> BOOLEAN .)
+    OR              reduce using rule 30 (literal -> BOOLEAN .)
+    AND             reduce using rule 30 (literal -> BOOLEAN .)
+    NEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
+    EQUAL           reduce using rule 30 (literal -> BOOLEAN .)
+    GEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
+    GREATERT        reduce using rule 30 (literal -> BOOLEAN .)
+    LEQUAL          reduce using rule 30 (literal -> BOOLEAN .)
+    LESST           reduce using rule 30 (literal -> BOOLEAN .)
+    DIVIDE          reduce using rule 30 (literal -> BOOLEAN .)
+    TIMES           reduce using rule 30 (literal -> BOOLEAN .)
+    MINUS           reduce using rule 30 (literal -> BOOLEAN .)
+    PLUS            reduce using rule 30 (literal -> BOOLEAN .)
+    ;               reduce using rule 30 (literal -> BOOLEAN .)
+
+
+state 22
+
+    (31) literal -> STRING .
+    )               reduce using rule 31 (literal -> STRING .)
+    OR              reduce using rule 31 (literal -> STRING .)
+    AND             reduce using rule 31 (literal -> STRING .)
+    NEQUAL          reduce using rule 31 (literal -> STRING .)
+    EQUAL           reduce using rule 31 (literal -> STRING .)
+    GEQUAL          reduce using rule 31 (literal -> STRING .)
+    GREATERT        reduce using rule 31 (literal -> STRING .)
+    LEQUAL          reduce using rule 31 (literal -> STRING .)
+    LESST           reduce using rule 31 (literal -> STRING .)
+    DIVIDE          reduce using rule 31 (literal -> STRING .)
+    TIMES           reduce using rule 31 (literal -> STRING .)
+    MINUS           reduce using rule 31 (literal -> STRING .)
+    PLUS            reduce using rule 31 (literal -> STRING .)
+    ;               reduce using rule 31 (literal -> STRING .)
+
+
+state 23
+
+    (32) literal -> FLOAT .
+    )               reduce using rule 32 (literal -> FLOAT .)
+    OR              reduce using rule 32 (literal -> FLOAT .)
+    AND             reduce using rule 32 (literal -> FLOAT .)
+    NEQUAL          reduce using rule 32 (literal -> FLOAT .)
+    EQUAL           reduce using rule 32 (literal -> FLOAT .)
+    GEQUAL          reduce using rule 32 (literal -> FLOAT .)
+    GREATERT        reduce using rule 32 (literal -> FLOAT .)
+    LEQUAL          reduce using rule 32 (literal -> FLOAT .)
+    LESST           reduce using rule 32 (literal -> FLOAT .)
+    DIVIDE          reduce using rule 32 (literal -> FLOAT .)
+    TIMES           reduce using rule 32 (literal -> FLOAT .)
+    MINUS           reduce using rule 32 (literal -> FLOAT .)
+    PLUS            reduce using rule 32 (literal -> FLOAT .)
+    ;               reduce using rule 32 (literal -> FLOAT .)
+
+
+state 24
+
+    (33) literal -> INTEGER .
+    )               reduce using rule 33 (literal -> INTEGER .)
+    OR              reduce using rule 33 (literal -> INTEGER .)
+    AND             reduce using rule 33 (literal -> INTEGER .)
+    NEQUAL          reduce using rule 33 (literal -> INTEGER .)
+    EQUAL           reduce using rule 33 (literal -> INTEGER .)
+    GEQUAL          reduce using rule 33 (literal -> INTEGER .)
+    GREATERT        reduce using rule 33 (literal -> INTEGER .)
+    LEQUAL          reduce using rule 33 (literal -> INTEGER .)
+    LESST           reduce using rule 33 (literal -> INTEGER .)
+    DIVIDE          reduce using rule 33 (literal -> INTEGER .)
+    TIMES           reduce using rule 33 (literal -> INTEGER .)
+    MINUS           reduce using rule 33 (literal -> INTEGER .)
+    PLUS            reduce using rule 33 (literal -> INTEGER .)
+    ;               reduce using rule 33 (literal -> INTEGER .)
+
+
+state 25
 
     (9) if_statement -> IF ( expr . ) { block }
     (10) if_statement -> IF ( expr . ) { block } ELSE { block }
@@ -987,22 +542,22 @@ state 38
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    )               shift and go to state 56
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    )               shift and go to state 43
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 39
+state 26
 
     (14) assign_statement -> IDENTIFIER ASSIGN expr . ;
     (18) expr -> expr . OR expr
@@ -1017,22 +572,22 @@ state 39
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    ;               shift and go to state 57
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    ;               shift and go to state 44
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 40
+state 27
 
     (12) var_declaration -> TYPE IDENTIFIER ; .
     WHILE           reduce using rule 12 (var_declaration -> TYPE IDENTIFIER ; .)
@@ -1043,7 +598,7 @@ state 40
     }               reduce using rule 12 (var_declaration -> TYPE IDENTIFIER ; .)
 
 
-state 41
+state 28
 
     (13) var_declaration -> TYPE IDENTIFIER ASSIGN . expr ;
     (15) expr -> . literal
@@ -1065,23 +620,535 @@ state 41
     (31) literal -> . STRING
     (32) literal -> . FLOAT
     (33) literal -> . INTEGER
-    IDENTIFIER      shift and go to state 15
-    (               shift and go to state 16
-    BOOLEAN         shift and go to state 17
-    STRING          shift and go to state 18
-    FLOAT           shift and go to state 19
-    INTEGER         shift and go to state 20
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 45
+    literal                        shift and go to state 19
+
+state 29
+
+    (17) expr -> ( expr . )
+    (18) expr -> expr . OR expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . NEQUAL expr
+    (21) expr -> expr . EQUAL expr
+    (22) expr -> expr . GEQUAL expr
+    (23) expr -> expr . GREATERT expr
+    (24) expr -> expr . LEQUAL expr
+    (25) expr -> expr . LESST expr
+    (26) expr -> expr . DIVIDE expr
+    (27) expr -> expr . TIMES expr
+    (28) expr -> expr . MINUS expr
+    (29) expr -> expr . PLUS expr
+    )               shift and go to state 46
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
+
+
+state 30
+
+    (11) while_statement -> WHILE ( expr ) . { block }
+    {               shift and go to state 47
+
+
+state 31
+
+    (18) expr -> expr OR . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 48
+    literal                        shift and go to state 19
+
+state 32
+
+    (19) expr -> expr AND . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 49
+    literal                        shift and go to state 19
+
+state 33
+
+    (20) expr -> expr NEQUAL . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 50
+    literal                        shift and go to state 19
+
+state 34
+
+    (21) expr -> expr EQUAL . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 51
+    literal                        shift and go to state 19
+
+state 35
+
+    (22) expr -> expr GEQUAL . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 52
+    literal                        shift and go to state 19
+
+state 36
+
+    (23) expr -> expr GREATERT . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 53
+    literal                        shift and go to state 19
+
+state 37
+
+    (24) expr -> expr LEQUAL . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 54
+    literal                        shift and go to state 19
+
+state 38
+
+    (25) expr -> expr LESST . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 55
+    literal                        shift and go to state 19
+
+state 39
+
+    (26) expr -> expr DIVIDE . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 56
+    literal                        shift and go to state 19
+
+state 40
+
+    (27) expr -> expr TIMES . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
+
+    expr                           shift and go to state 57
+    literal                        shift and go to state 19
+
+state 41
+
+    (28) expr -> expr MINUS . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
     expr                           shift and go to state 58
-    literal                        shift and go to state 14
+    literal                        shift and go to state 19
 
 state 42
 
-    (11) while_statement -> WHILE expr { block . }
-    }               shift and go to state 59
+    (29) expr -> expr PLUS . expr
+    (15) expr -> . literal
+    (16) expr -> . IDENTIFIER
+    (17) expr -> . ( expr )
+    (18) expr -> . expr OR expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr NEQUAL expr
+    (21) expr -> . expr EQUAL expr
+    (22) expr -> . expr GEQUAL expr
+    (23) expr -> . expr GREATERT expr
+    (24) expr -> . expr LEQUAL expr
+    (25) expr -> . expr LESST expr
+    (26) expr -> . expr DIVIDE expr
+    (27) expr -> . expr TIMES expr
+    (28) expr -> . expr MINUS expr
+    (29) expr -> . expr PLUS expr
+    (30) literal -> . BOOLEAN
+    (31) literal -> . STRING
+    (32) literal -> . FLOAT
+    (33) literal -> . INTEGER
+    IDENTIFIER      shift and go to state 20
+    (               shift and go to state 17
+    BOOLEAN         shift and go to state 21
+    STRING          shift and go to state 22
+    FLOAT           shift and go to state 23
+    INTEGER         shift and go to state 24
 
+    expr                           shift and go to state 59
+    literal                        shift and go to state 19
 
 state 43
+
+    (9) if_statement -> IF ( expr ) . { block }
+    (10) if_statement -> IF ( expr ) . { block } ELSE { block }
+    {               shift and go to state 60
+
+
+state 44
+
+    (14) assign_statement -> IDENTIFIER ASSIGN expr ; .
+    WHILE           reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+    IF              reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+    IDENTIFIER      reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+    TYPE            reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+    $end            reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+    }               reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
+
+
+state 45
+
+    (13) var_declaration -> TYPE IDENTIFIER ASSIGN expr . ;
+    (18) expr -> expr . OR expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . NEQUAL expr
+    (21) expr -> expr . EQUAL expr
+    (22) expr -> expr . GEQUAL expr
+    (23) expr -> expr . GREATERT expr
+    (24) expr -> expr . LEQUAL expr
+    (25) expr -> expr . LESST expr
+    (26) expr -> expr . DIVIDE expr
+    (27) expr -> expr . TIMES expr
+    (28) expr -> expr . MINUS expr
+    (29) expr -> expr . PLUS expr
+    ;               shift and go to state 61
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
+
+
+state 46
+
+    (17) expr -> ( expr ) .
+    )               reduce using rule 17 (expr -> ( expr ) .)
+    OR              reduce using rule 17 (expr -> ( expr ) .)
+    AND             reduce using rule 17 (expr -> ( expr ) .)
+    NEQUAL          reduce using rule 17 (expr -> ( expr ) .)
+    EQUAL           reduce using rule 17 (expr -> ( expr ) .)
+    GEQUAL          reduce using rule 17 (expr -> ( expr ) .)
+    GREATERT        reduce using rule 17 (expr -> ( expr ) .)
+    LEQUAL          reduce using rule 17 (expr -> ( expr ) .)
+    LESST           reduce using rule 17 (expr -> ( expr ) .)
+    DIVIDE          reduce using rule 17 (expr -> ( expr ) .)
+    TIMES           reduce using rule 17 (expr -> ( expr ) .)
+    MINUS           reduce using rule 17 (expr -> ( expr ) .)
+    PLUS            reduce using rule 17 (expr -> ( expr ) .)
+    ;               reduce using rule 17 (expr -> ( expr ) .)
+
+
+state 47
+
+    (11) while_statement -> WHILE ( expr ) { . block }
+    (1) block -> .
+    (2) block -> . statements
+    (3) statements -> . statements statement
+    (4) statements -> . statement
+    (5) statement -> . while_statement
+    (6) statement -> . if_statement
+    (7) statement -> . assign_statement
+    (8) statement -> . var_declaration
+    (11) while_statement -> . WHILE ( expr ) { block }
+    (9) if_statement -> . IF ( expr ) { block }
+    (10) if_statement -> . IF ( expr ) { block } ELSE { block }
+    (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
+    (12) var_declaration -> . TYPE IDENTIFIER ;
+    (13) var_declaration -> . TYPE IDENTIFIER ASSIGN expr ;
+    }               reduce using rule 1 (block -> .)
+    WHILE           shift and go to state 8
+    IF              shift and go to state 9
+    IDENTIFIER      shift and go to state 10
+    TYPE            shift and go to state 11
+
+    block                          shift and go to state 62
+    statements                     shift and go to state 2
+    statement                      shift and go to state 3
+    while_statement                shift and go to state 4
+    if_statement                   shift and go to state 5
+    assign_statement               shift and go to state 6
+    var_declaration                shift and go to state 7
+
+state 48
 
     (18) expr -> expr OR expr .
     (18) expr -> expr . OR expr
@@ -1108,24 +1175,23 @@ state 43
   ! shift/reduce conflict for TIMES resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
   ! shift/reduce conflict for PLUS resolved as shift
-    {               reduce using rule 18 (expr -> expr OR expr .)
     )               reduce using rule 18 (expr -> expr OR expr .)
     ;               reduce using rule 18 (expr -> expr OR expr .)
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 44
+state 49
 
     (19) expr -> expr AND expr .
     (18) expr -> expr . OR expr
@@ -1152,24 +1218,23 @@ state 44
   ! shift/reduce conflict for TIMES resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
   ! shift/reduce conflict for PLUS resolved as shift
-    {               reduce using rule 19 (expr -> expr AND expr .)
     )               reduce using rule 19 (expr -> expr AND expr .)
     ;               reduce using rule 19 (expr -> expr AND expr .)
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    OR              shift and go to state 31
+    AND             shift and go to state 32
+    NEQUAL          shift and go to state 33
+    EQUAL           shift and go to state 34
+    GEQUAL          shift and go to state 35
+    GREATERT        shift and go to state 36
+    LEQUAL          shift and go to state 37
+    LESST           shift and go to state 38
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 45
+state 50
 
     (20) expr -> expr NEQUAL expr .
     (18) expr -> expr . OR expr
@@ -1184,7 +1249,7 @@ state 45
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 20 (expr -> expr NEQUAL expr .)
+    )               reduce using rule 20 (expr -> expr NEQUAL expr .)
     OR              reduce using rule 20 (expr -> expr NEQUAL expr .)
     AND             reduce using rule 20 (expr -> expr NEQUAL expr .)
     NEQUAL          reduce using rule 20 (expr -> expr NEQUAL expr .)
@@ -1193,15 +1258,14 @@ state 45
     GREATERT        reduce using rule 20 (expr -> expr NEQUAL expr .)
     LEQUAL          reduce using rule 20 (expr -> expr NEQUAL expr .)
     LESST           reduce using rule 20 (expr -> expr NEQUAL expr .)
-    )               reduce using rule 20 (expr -> expr NEQUAL expr .)
     ;               reduce using rule 20 (expr -> expr NEQUAL expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 46
+state 51
 
     (21) expr -> expr EQUAL expr .
     (18) expr -> expr . OR expr
@@ -1216,7 +1280,7 @@ state 46
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 21 (expr -> expr EQUAL expr .)
+    )               reduce using rule 21 (expr -> expr EQUAL expr .)
     OR              reduce using rule 21 (expr -> expr EQUAL expr .)
     AND             reduce using rule 21 (expr -> expr EQUAL expr .)
     NEQUAL          reduce using rule 21 (expr -> expr EQUAL expr .)
@@ -1225,15 +1289,14 @@ state 46
     GREATERT        reduce using rule 21 (expr -> expr EQUAL expr .)
     LEQUAL          reduce using rule 21 (expr -> expr EQUAL expr .)
     LESST           reduce using rule 21 (expr -> expr EQUAL expr .)
-    )               reduce using rule 21 (expr -> expr EQUAL expr .)
     ;               reduce using rule 21 (expr -> expr EQUAL expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 47
+state 52
 
     (22) expr -> expr GEQUAL expr .
     (18) expr -> expr . OR expr
@@ -1248,7 +1311,7 @@ state 47
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 22 (expr -> expr GEQUAL expr .)
+    )               reduce using rule 22 (expr -> expr GEQUAL expr .)
     OR              reduce using rule 22 (expr -> expr GEQUAL expr .)
     AND             reduce using rule 22 (expr -> expr GEQUAL expr .)
     NEQUAL          reduce using rule 22 (expr -> expr GEQUAL expr .)
@@ -1257,15 +1320,14 @@ state 47
     GREATERT        reduce using rule 22 (expr -> expr GEQUAL expr .)
     LEQUAL          reduce using rule 22 (expr -> expr GEQUAL expr .)
     LESST           reduce using rule 22 (expr -> expr GEQUAL expr .)
-    )               reduce using rule 22 (expr -> expr GEQUAL expr .)
     ;               reduce using rule 22 (expr -> expr GEQUAL expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 48
+state 53
 
     (23) expr -> expr GREATERT expr .
     (18) expr -> expr . OR expr
@@ -1280,7 +1342,7 @@ state 48
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 23 (expr -> expr GREATERT expr .)
+    )               reduce using rule 23 (expr -> expr GREATERT expr .)
     OR              reduce using rule 23 (expr -> expr GREATERT expr .)
     AND             reduce using rule 23 (expr -> expr GREATERT expr .)
     NEQUAL          reduce using rule 23 (expr -> expr GREATERT expr .)
@@ -1289,15 +1351,14 @@ state 48
     GREATERT        reduce using rule 23 (expr -> expr GREATERT expr .)
     LEQUAL          reduce using rule 23 (expr -> expr GREATERT expr .)
     LESST           reduce using rule 23 (expr -> expr GREATERT expr .)
-    )               reduce using rule 23 (expr -> expr GREATERT expr .)
     ;               reduce using rule 23 (expr -> expr GREATERT expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 49
+state 54
 
     (24) expr -> expr LEQUAL expr .
     (18) expr -> expr . OR expr
@@ -1312,7 +1373,7 @@ state 49
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 24 (expr -> expr LEQUAL expr .)
+    )               reduce using rule 24 (expr -> expr LEQUAL expr .)
     OR              reduce using rule 24 (expr -> expr LEQUAL expr .)
     AND             reduce using rule 24 (expr -> expr LEQUAL expr .)
     NEQUAL          reduce using rule 24 (expr -> expr LEQUAL expr .)
@@ -1321,15 +1382,14 @@ state 49
     GREATERT        reduce using rule 24 (expr -> expr LEQUAL expr .)
     LEQUAL          reduce using rule 24 (expr -> expr LEQUAL expr .)
     LESST           reduce using rule 24 (expr -> expr LEQUAL expr .)
-    )               reduce using rule 24 (expr -> expr LEQUAL expr .)
     ;               reduce using rule 24 (expr -> expr LEQUAL expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 50
+state 55
 
     (25) expr -> expr LESST expr .
     (18) expr -> expr . OR expr
@@ -1344,7 +1404,7 @@ state 50
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 25 (expr -> expr LESST expr .)
+    )               reduce using rule 25 (expr -> expr LESST expr .)
     OR              reduce using rule 25 (expr -> expr LESST expr .)
     AND             reduce using rule 25 (expr -> expr LESST expr .)
     NEQUAL          reduce using rule 25 (expr -> expr LESST expr .)
@@ -1353,15 +1413,14 @@ state 50
     GREATERT        reduce using rule 25 (expr -> expr LESST expr .)
     LEQUAL          reduce using rule 25 (expr -> expr LESST expr .)
     LESST           reduce using rule 25 (expr -> expr LESST expr .)
-    )               reduce using rule 25 (expr -> expr LESST expr .)
     ;               reduce using rule 25 (expr -> expr LESST expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
+    MINUS           shift and go to state 41
+    PLUS            shift and go to state 42
 
 
-state 51
+state 56
 
     (26) expr -> expr DIVIDE expr .
     (18) expr -> expr . OR expr
@@ -1376,7 +1435,7 @@ state 51
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 26 (expr -> expr DIVIDE expr .)
+    )               reduce using rule 26 (expr -> expr DIVIDE expr .)
     OR              reduce using rule 26 (expr -> expr DIVIDE expr .)
     AND             reduce using rule 26 (expr -> expr DIVIDE expr .)
     NEQUAL          reduce using rule 26 (expr -> expr DIVIDE expr .)
@@ -1389,11 +1448,10 @@ state 51
     TIMES           reduce using rule 26 (expr -> expr DIVIDE expr .)
     MINUS           reduce using rule 26 (expr -> expr DIVIDE expr .)
     PLUS            reduce using rule 26 (expr -> expr DIVIDE expr .)
-    )               reduce using rule 26 (expr -> expr DIVIDE expr .)
     ;               reduce using rule 26 (expr -> expr DIVIDE expr .)
 
 
-state 52
+state 57
 
     (27) expr -> expr TIMES expr .
     (18) expr -> expr . OR expr
@@ -1408,7 +1466,7 @@ state 52
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 27 (expr -> expr TIMES expr .)
+    )               reduce using rule 27 (expr -> expr TIMES expr .)
     OR              reduce using rule 27 (expr -> expr TIMES expr .)
     AND             reduce using rule 27 (expr -> expr TIMES expr .)
     NEQUAL          reduce using rule 27 (expr -> expr TIMES expr .)
@@ -1421,11 +1479,10 @@ state 52
     TIMES           reduce using rule 27 (expr -> expr TIMES expr .)
     MINUS           reduce using rule 27 (expr -> expr TIMES expr .)
     PLUS            reduce using rule 27 (expr -> expr TIMES expr .)
-    )               reduce using rule 27 (expr -> expr TIMES expr .)
     ;               reduce using rule 27 (expr -> expr TIMES expr .)
 
 
-state 53
+state 58
 
     (28) expr -> expr MINUS expr .
     (18) expr -> expr . OR expr
@@ -1440,7 +1497,7 @@ state 53
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 28 (expr -> expr MINUS expr .)
+    )               reduce using rule 28 (expr -> expr MINUS expr .)
     OR              reduce using rule 28 (expr -> expr MINUS expr .)
     AND             reduce using rule 28 (expr -> expr MINUS expr .)
     NEQUAL          reduce using rule 28 (expr -> expr MINUS expr .)
@@ -1451,13 +1508,12 @@ state 53
     LESST           reduce using rule 28 (expr -> expr MINUS expr .)
     MINUS           reduce using rule 28 (expr -> expr MINUS expr .)
     PLUS            reduce using rule 28 (expr -> expr MINUS expr .)
-    )               reduce using rule 28 (expr -> expr MINUS expr .)
     ;               reduce using rule 28 (expr -> expr MINUS expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
 
 
-state 54
+state 59
 
     (29) expr -> expr PLUS expr .
     (18) expr -> expr . OR expr
@@ -1472,7 +1528,7 @@ state 54
     (27) expr -> expr . TIMES expr
     (28) expr -> expr . MINUS expr
     (29) expr -> expr . PLUS expr
-    {               reduce using rule 29 (expr -> expr PLUS expr .)
+    )               reduce using rule 29 (expr -> expr PLUS expr .)
     OR              reduce using rule 29 (expr -> expr PLUS expr .)
     AND             reduce using rule 29 (expr -> expr PLUS expr .)
     NEQUAL          reduce using rule 29 (expr -> expr PLUS expr .)
@@ -1483,89 +1539,9 @@ state 54
     LESST           reduce using rule 29 (expr -> expr PLUS expr .)
     MINUS           reduce using rule 29 (expr -> expr PLUS expr .)
     PLUS            reduce using rule 29 (expr -> expr PLUS expr .)
-    )               reduce using rule 29 (expr -> expr PLUS expr .)
     ;               reduce using rule 29 (expr -> expr PLUS expr .)
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-
-
-state 55
-
-    (17) expr -> ( expr ) .
-    {               reduce using rule 17 (expr -> ( expr ) .)
-    OR              reduce using rule 17 (expr -> ( expr ) .)
-    AND             reduce using rule 17 (expr -> ( expr ) .)
-    NEQUAL          reduce using rule 17 (expr -> ( expr ) .)
-    EQUAL           reduce using rule 17 (expr -> ( expr ) .)
-    GEQUAL          reduce using rule 17 (expr -> ( expr ) .)
-    GREATERT        reduce using rule 17 (expr -> ( expr ) .)
-    LEQUAL          reduce using rule 17 (expr -> ( expr ) .)
-    LESST           reduce using rule 17 (expr -> ( expr ) .)
-    DIVIDE          reduce using rule 17 (expr -> ( expr ) .)
-    TIMES           reduce using rule 17 (expr -> ( expr ) .)
-    MINUS           reduce using rule 17 (expr -> ( expr ) .)
-    PLUS            reduce using rule 17 (expr -> ( expr ) .)
-    )               reduce using rule 17 (expr -> ( expr ) .)
-    ;               reduce using rule 17 (expr -> ( expr ) .)
-
-
-state 56
-
-    (9) if_statement -> IF ( expr ) . { block }
-    (10) if_statement -> IF ( expr ) . { block } ELSE { block }
-    {               shift and go to state 60
-
-
-state 57
-
-    (14) assign_statement -> IDENTIFIER ASSIGN expr ; .
-    WHILE           reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-    IF              reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-    IDENTIFIER      reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-    TYPE            reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-    $end            reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-    }               reduce using rule 14 (assign_statement -> IDENTIFIER ASSIGN expr ; .)
-
-
-state 58
-
-    (13) var_declaration -> TYPE IDENTIFIER ASSIGN expr . ;
-    (18) expr -> expr . OR expr
-    (19) expr -> expr . AND expr
-    (20) expr -> expr . NEQUAL expr
-    (21) expr -> expr . EQUAL expr
-    (22) expr -> expr . GEQUAL expr
-    (23) expr -> expr . GREATERT expr
-    (24) expr -> expr . LEQUAL expr
-    (25) expr -> expr . LESST expr
-    (26) expr -> expr . DIVIDE expr
-    (27) expr -> expr . TIMES expr
-    (28) expr -> expr . MINUS expr
-    (29) expr -> expr . PLUS expr
-    ;               shift and go to state 61
-    OR              shift and go to state 25
-    AND             shift and go to state 26
-    NEQUAL          shift and go to state 27
-    EQUAL           shift and go to state 28
-    GEQUAL          shift and go to state 29
-    GREATERT        shift and go to state 30
-    LEQUAL          shift and go to state 31
-    LESST           shift and go to state 32
-    DIVIDE          shift and go to state 33
-    TIMES           shift and go to state 34
-    MINUS           shift and go to state 35
-    PLUS            shift and go to state 36
-
-
-state 59
-
-    (11) while_statement -> WHILE expr { block } .
-    WHILE           reduce using rule 11 (while_statement -> WHILE expr { block } .)
-    IF              reduce using rule 11 (while_statement -> WHILE expr { block } .)
-    IDENTIFIER      reduce using rule 11 (while_statement -> WHILE expr { block } .)
-    TYPE            reduce using rule 11 (while_statement -> WHILE expr { block } .)
-    $end            reduce using rule 11 (while_statement -> WHILE expr { block } .)
-    }               reduce using rule 11 (while_statement -> WHILE expr { block } .)
+    DIVIDE          shift and go to state 39
+    TIMES           shift and go to state 40
 
 
 state 60
@@ -1580,7 +1556,7 @@ state 60
     (6) statement -> . if_statement
     (7) statement -> . assign_statement
     (8) statement -> . var_declaration
-    (11) while_statement -> . WHILE expr { block }
+    (11) while_statement -> . WHILE ( expr ) { block }
     (9) if_statement -> . IF ( expr ) { block }
     (10) if_statement -> . IF ( expr ) { block } ELSE { block }
     (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
@@ -1592,7 +1568,7 @@ state 60
     IDENTIFIER      shift and go to state 10
     TYPE            shift and go to state 11
 
-    block                          shift and go to state 62
+    block                          shift and go to state 63
     statements                     shift and go to state 2
     statement                      shift and go to state 3
     while_statement                shift and go to state 4
@@ -1613,12 +1589,29 @@ state 61
 
 state 62
 
-    (9) if_statement -> IF ( expr ) { block . }
-    (10) if_statement -> IF ( expr ) { block . } ELSE { block }
-    }               shift and go to state 63
+    (11) while_statement -> WHILE ( expr ) { block . }
+    }               shift and go to state 64
 
 
 state 63
+
+    (9) if_statement -> IF ( expr ) { block . }
+    (10) if_statement -> IF ( expr ) { block . } ELSE { block }
+    }               shift and go to state 65
+
+
+state 64
+
+    (11) while_statement -> WHILE ( expr ) { block } .
+    WHILE           reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+    IF              reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+    IDENTIFIER      reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+    TYPE            reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+    $end            reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+    }               reduce using rule 11 (while_statement -> WHILE ( expr ) { block } .)
+
+
+state 65
 
     (9) if_statement -> IF ( expr ) { block } .
     (10) if_statement -> IF ( expr ) { block } . ELSE { block }
@@ -1628,16 +1621,16 @@ state 63
     TYPE            reduce using rule 9 (if_statement -> IF ( expr ) { block } .)
     $end            reduce using rule 9 (if_statement -> IF ( expr ) { block } .)
     }               reduce using rule 9 (if_statement -> IF ( expr ) { block } .)
-    ELSE            shift and go to state 64
+    ELSE            shift and go to state 66
 
 
-state 64
+state 66
 
     (10) if_statement -> IF ( expr ) { block } ELSE . { block }
-    {               shift and go to state 65
+    {               shift and go to state 67
 
 
-state 65
+state 67
 
     (10) if_statement -> IF ( expr ) { block } ELSE { . block }
     (1) block -> .
@@ -1648,7 +1641,7 @@ state 65
     (6) statement -> . if_statement
     (7) statement -> . assign_statement
     (8) statement -> . var_declaration
-    (11) while_statement -> . WHILE expr { block }
+    (11) while_statement -> . WHILE ( expr ) { block }
     (9) if_statement -> . IF ( expr ) { block }
     (10) if_statement -> . IF ( expr ) { block } ELSE { block }
     (14) assign_statement -> . IDENTIFIER ASSIGN expr ;
@@ -1660,7 +1653,7 @@ state 65
     IDENTIFIER      shift and go to state 10
     TYPE            shift and go to state 11
 
-    block                          shift and go to state 66
+    block                          shift and go to state 68
     statements                     shift and go to state 2
     statement                      shift and go to state 3
     while_statement                shift and go to state 4
@@ -1668,13 +1661,13 @@ state 65
     assign_statement               shift and go to state 6
     var_declaration                shift and go to state 7
 
-state 66
+state 68
 
     (10) if_statement -> IF ( expr ) { block } ELSE { block . }
-    }               shift and go to state 67
+    }               shift and go to state 69
 
 
-state 67
+state 69
 
     (10) if_statement -> IF ( expr ) { block } ELSE { block } .
     WHILE           reduce using rule 10 (if_statement -> IF ( expr ) { block } ELSE { block } .)
@@ -1687,27 +1680,27 @@ state 67
 
 Conflicts:
 
-shift/reduce conflict for OR in state 43 resolved as shift
-shift/reduce conflict for AND in state 43 resolved as shift
-shift/reduce conflict for NEQUAL in state 43 resolved as shift
-shift/reduce conflict for EQUAL in state 43 resolved as shift
-shift/reduce conflict for GEQUAL in state 43 resolved as shift
-shift/reduce conflict for GREATERT in state 43 resolved as shift
-shift/reduce conflict for LEQUAL in state 43 resolved as shift
-shift/reduce conflict for LESST in state 43 resolved as shift
-shift/reduce conflict for DIVIDE in state 43 resolved as shift
-shift/reduce conflict for TIMES in state 43 resolved as shift
-shift/reduce conflict for MINUS in state 43 resolved as shift
-shift/reduce conflict for PLUS in state 43 resolved as shift
-shift/reduce conflict for OR in state 44 resolved as shift
-shift/reduce conflict for AND in state 44 resolved as shift
-shift/reduce conflict for NEQUAL in state 44 resolved as shift
-shift/reduce conflict for EQUAL in state 44 resolved as shift
-shift/reduce conflict for GEQUAL in state 44 resolved as shift
-shift/reduce conflict for GREATERT in state 44 resolved as shift
-shift/reduce conflict for LEQUAL in state 44 resolved as shift
-shift/reduce conflict for LESST in state 44 resolved as shift
-shift/reduce conflict for DIVIDE in state 44 resolved as shift
-shift/reduce conflict for TIMES in state 44 resolved as shift
-shift/reduce conflict for MINUS in state 44 resolved as shift
-shift/reduce conflict for PLUS in state 44 resolved as shift
+shift/reduce conflict for OR in state 48 resolved as shift
+shift/reduce conflict for AND in state 48 resolved as shift
+shift/reduce conflict for NEQUAL in state 48 resolved as shift
+shift/reduce conflict for EQUAL in state 48 resolved as shift
+shift/reduce conflict for GEQUAL in state 48 resolved as shift
+shift/reduce conflict for GREATERT in state 48 resolved as shift
+shift/reduce conflict for LEQUAL in state 48 resolved as shift
+shift/reduce conflict for LESST in state 48 resolved as shift
+shift/reduce conflict for DIVIDE in state 48 resolved as shift
+shift/reduce conflict for TIMES in state 48 resolved as shift
+shift/reduce conflict for MINUS in state 48 resolved as shift
+shift/reduce conflict for PLUS in state 48 resolved as shift
+shift/reduce conflict for OR in state 49 resolved as shift
+shift/reduce conflict for AND in state 49 resolved as shift
+shift/reduce conflict for NEQUAL in state 49 resolved as shift
+shift/reduce conflict for EQUAL in state 49 resolved as shift
+shift/reduce conflict for GEQUAL in state 49 resolved as shift
+shift/reduce conflict for GREATERT in state 49 resolved as shift
+shift/reduce conflict for LEQUAL in state 49 resolved as shift
+shift/reduce conflict for LESST in state 49 resolved as shift
+shift/reduce conflict for DIVIDE in state 49 resolved as shift
+shift/reduce conflict for TIMES in state 49 resolved as shift
+shift/reduce conflict for MINUS in state 49 resolved as shift
+shift/reduce conflict for PLUS in state 49 resolved as shift
