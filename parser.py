@@ -69,7 +69,7 @@ class MyParser(Parser):
         print('#10#', self.symstack, '\n')
         return ('if_statement', p.expr, ('branch', p.block))
     
-    @_('WHILE expr "{" block "}"')
+    @_('WHILE "(" expr ")" "{" block "}"')
     def while_statement(self, p):
         print('#11#', self.symstack, '\n')
         return ('while_loop', ('while_loop_setup', p.expr), p.block)
